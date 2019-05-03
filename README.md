@@ -1,6 +1,6 @@
-# Convenience scripts for my personal use. Mostly wrappers for common tasks on linux and macOS.
+# Convenience scripts for my personal use.
 
-Over many years of working on different unix and unix-like systems, I've tried hard not to become too dependent on my own little helper scripts. That has forced me learn the standard commands better. More importantly, it's helped me be comfortable when I need to work on a server that's not "mine" for some quick troubleshooting.
+Over many years of working on linux and unix systems, I've tried hard not to become too dependent on my own custom aliases or scripts. That has forced me learn the standard commands better. More importantly, it's helped me be comfortable when I need to work on a server that's not "mine" for some quick troubleshooting.
 
 Despite my best efforts, I've slowly accumulated a small list of personal tools, many of which have become muscle memory, especially since switching from Windows to a macbook where the shell is so easily accessible and so well integrated.
 
