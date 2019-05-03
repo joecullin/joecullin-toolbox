@@ -1,0 +1,31 @@
+#!/usr/bin/perl --
+
+# Script to enable/disable SOCKS proxy for tnet & dobey.
+# Requires initial setup: configure proxy to use localhost:8080 in System Preferences | Network | Advanced.
+
+use strict;
+my $mode = $ARGV[0];
+
+if ($mode eq 'on')
+{
+	system("ssh -D 8080 -C -N dobey.cmg.net &");
+	system("networksetup -setsocksfirewallproxystate \"Wi-Fi\" on");
+	print "enabled SOCKS proxy\n";
+}
+elsif ($mode eq 'off')
+{
+	system("networksetup -setsocksfirewallproxystate \"Wi-Fi\" off");
+	system("pkill -f 'ssh -D 8080'");
+	print "disabled SOCKS proxy\n";
+}
+else{
+	my $running = qx{pgrep -lf 'ssh -D 8080'};
+	if ($running eq ''){
+		print "Looks like proxy is not running.\n";
+	}
+	else{
+		print "Looks like proxy is running.\n$running\n";
+	}
+
+	print "Include an argument of 'on' to enable, or 'off' to disable.\n";
+}

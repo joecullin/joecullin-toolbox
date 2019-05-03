@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+# Run this with sudo to see all the crontabs on the server.
+
+use strict;
+
+my $users = qx{cut -f1 -d: /etc/passwd};
+
+foreach my $user (split /\n/, $users)
+{
+	my $crontab = qx{crontab -u $user -l 2>/dev/null};
+
+	next if $crontab eq '';
+
+	print "$user\n$crontab\n";
+}
+
+# also look in /etc/crontab
+
+if (open my $fh, '<', '/etc/crontab')
+{
+	$/ = undef;
+	my $data = <$fh>;
+	close $fh;
+	print "/etc/crontab:\n$data\n" if $data ne '';
+}

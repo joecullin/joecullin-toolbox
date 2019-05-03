@@ -1,0 +1,58 @@
+#!/usr/bin/perl --
+
+# shortcut for validating / pretty-printing json
+#
+# Examples:
+#      json             - read input from clipboard
+#      json -           - read input from stdin
+#      json file.json   - read input from file
+#
+# Slightly annoying but sometimes useful side-effect - it alphabetizes your keys.
+
+use strict;
+use warnings;
+
+my $jsonString = '';
+
+if (scalar(@ARGV)){
+    my $fileName = $ARGV[0];
+    if ($fileName eq '-'){
+        $jsonString = do { local $/; <STDIN> };
+    }
+    if (open(my $fh, '<', $fileName)){
+        $jsonString = do { local $/; <$fh> };
+        close $fh;
+    }
+}
+else{
+    $jsonString = qx{pbpaste};
+}
+
+my $cmd = 'python -mjson.tool';
+
+# Do a test run to see if it succeeds.
+
+open(my $cmdFH, '|-', $cmd) or die "Can't run json command $cmd. $!";
+print $cmdFH $jsonString;
+close $cmdFH;
+my $exitcode = $?;
+
+# If it succeeded, run it again with paged output.
+
+if ($exitcode == 0){
+    $cmd .= ' | less';
+    open(my $cmdFH, '|-', $cmd) or die "Can't run json command $cmd. $!";
+    print $cmdFH $jsonString;
+    close $cmdFH;
+}
+else{
+    print "Error. Show line numbered input? (y/N): ";
+    my $response = <>;
+    if ($response =~ /^y/i){
+        my $counter = 1;
+        $jsonString =~ s/^/ $counter++ /emg;
+        open(my $cmdFH, '|-', 'less') or die "Can't run less command.";
+        print $cmdFH $jsonString;
+        close $cmdFH;
+    }
+}

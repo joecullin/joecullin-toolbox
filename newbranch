@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+
+use strict;
+
+my $name = shift;
+
+system("git checkout -b '$name'");
+system("git push -u origin '$name'");
+
+

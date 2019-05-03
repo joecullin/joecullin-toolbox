@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+
+# Compare a file or directory on this server vs. another.
+
+use strict;
+
+my $file = shift;
+
+die("I'm scared of that filename!") if $file =~ m![^A-Za-z0-9./_-]!;
+
+if (-d $file)
+{
+	my $cmd = qq{find $file -type f | fgrep -v svn | xargs -I{} remote_diff {} | less};
+	exec($cmd) or die("could not compare dir: $!");
+}
+
+die("File '$file' not found on local server.") if ! -f $file;
+
+use Cwd 'abs_path';
+my $fullpath = abs_path($file);
+
+my $server = 'put-your-server-name-here';
+my %dirmap = (
+	'/usr/www/' => '/www/',
+	'/home/web/' => '/web/',
+);
+for my $realdir (keys %dirmap)
+{
+	my $symlink = $dirmap{$realdir};
+	$fullpath =~ s!\Q$realdir\E!$symlink!;
+}
+
+# From http://serverfault.com/questions/59140/how-do-diff-over-ssh
+my $cmd = qq{ssh $server "cat $fullpath" | diff -u -w - "$fullpath"};
+print $cmd . "\n";
+system($cmd);
+
+
+

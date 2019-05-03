@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# gmail-to-evernote paste stopped working, but if I "launder" the clipboard it works.
+
+pbpaste | pbcopy

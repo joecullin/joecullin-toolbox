@@ -1,0 +1,46 @@
+#!/usr/bin/perl --
+
+# fh (Find Here) -- find text in this dir and subdirs.
+# It's like this:
+#   find . -type f | xargs -I{} fgrep -Hn [<optional args...>] [<search string>] {} | less
+# Examples:
+#   fh -i taxonomy
+#   fh 'nuxeo-directory-radio'
+#   fh -skip taxonomy      - skip dirs named node_modules, etc. "-skip" must be the first arg. List is hardcoded.
+#
+# See also "fa" which does a better job at skipping non-code files, but it's gotten too big and slow.
+
+use strict;
+my $fileFilter = '';
+my @fgrepArgs = @ARGV;
+my $searchString = pop @fgrepArgs;
+if ($fgrepArgs[0] eq '-skip'){
+
+    $fileFilter .= q{| fgrep -v '/node_modules/'};
+    $fileFilter .= q{| fgrep -v '/static-src/'};
+    $fileFilter .= q{| fgrep -v '/.min.js/'};
+    $fileFilter .= q{| fgrep -v '/critical-css/'};
+    $fileFilter .= q{| fgrep -v '/data/'};
+    $fileFilter .= q{| fgrep -v '/.svn/'};
+    $fileFilter .= q{| fgrep -v '/nux-react/build/'};
+    $fileFilter .= q{| fgrep -v '/legacy-content/'};
+    $fileFilter .= q{| fgrep -v '/static/js/main'};
+    $fileFilter .= q{| fgrep -v 'production.min.js'};
+    # $fileFilter .= q{| fgrep -v 'thm-react.js'};
+    print "Skipping some files: " . $fileFilter . "\n";
+    shift @fgrepArgs;
+}
+
+#TODO: escape search string to make it safe for command line
+#TODO: same for fgrep args
+
+my $cmd = join(' ',
+            qq{find . -type f $fileFilter | fgrep -v '.swp' | fgrep -v '.svn' | fgrep -v '.git/'},
+            qq{| xargs -I{} fgrep -Hn},
+            qq{@fgrepArgs},
+            q{'} . $searchString . q{'},
+            qq{{} | less},
+            );
+# print "$cmd\n";
+exec($cmd) or die "Can't execute $cmd -- $!";
+

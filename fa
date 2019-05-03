@@ -1,0 +1,78 @@
+#!/usr/bin/perl --
+
+# Search within a set of code using fgrep.
+# still rough, a work in progress:
+# - probably doesn't handle escaping special characters for shell
+# - an option to limit to "core" dirs would be nice.
+# - would be nice to add paging (works ok piped to pager for now).
+# - would be nice to skip known non-code dirs.
+ 
+use strict;
+use File::Find;
+
+my $codefileRE = qr{^(\#\!|\<\?)};
+my $svnfileRE = qr{\Q.svn\E};
+my @skipFiles = qw{
+	/code/tin.thomasnet/site/tnetaccount/style.css
+};
+my %skipFiles = ();
+do { $skipFiles{$_}++; } for @skipFiles;
+
+my @fgrepArgs = @ARGV;
+
+my @dirs = qw(/www/tnet /web/tnet /www/tnetadmin /www/tnetcc /www/rfiapi /www/ccapi /www/nestapi /web/global /web/thomasnet /web/thomasapi /web/thomas /web/evt /usr/tnetbuild/relatedaccounts/Jan2014
+);
+if (-d '/Users/jcullin') {
+    @dirs = qw(
+		/code/
+		/Users/joe/scripts
+	);
+
+	my @old = qw(
+		/Users/joe/repos/tnet_frontend/prod20150223/web/tnet
+		/Users/joe/repos/tnet_frontend/prod20150223/www/tnet
+		/Users/joe/repos/tnet_frontend/prod20150223/www/tnetps
+	);
+}
+
+my @files;
+find ({'wanted' => \&process_file, 'follow' => 1, 'follow_skip' => 2}, @dirs);
+
+print STDERR "searching " . scalar(@files) . " files in @dirs ...\n";
+
+my $batch = 0;
+my $batchSize = 100;
+while ($batch <= $#files) {
+   my $batchMax = $batch + $batchSize;
+   $batchMax = $#files if $#files < $batchMax;
+   my @fileBatch = @files[$batch .. $batchMax];
+
+   system(
+	  # 'xargs',
+	  'fgrep',
+	  @fgrepArgs,
+	  @fileBatch);
+   $batch += $batchSize + 1;
+}
+
+sub process_file
+{
+    my $name = $File::Find::name;
+    push @files, $name if ($name =~ m{\.(php|html|inc|js|css)$}i || is_code_file($name));
+}
+
+sub is_code_file
+{
+    my $name = shift;
+
+    return if $name =~ /$svnfileRE/;	# skip subversion files
+    return if ! -T $name;		# only look at text files
+    return if $skipFiles{$name};	# skip some files (like minified js & css)    #JOE -- this isn't working yet.
+
+    open(my $fh, '<', $name);
+    my $line1 = <$fh>;
+    close $fh;
+    return 1 if $line1 =~ /$codefileRE/;
+
+    return;
+}
