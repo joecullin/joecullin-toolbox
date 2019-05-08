@@ -1,0 +1,22 @@
+#!/usr/bin/perl --
+
+# Clean up style and check code, before commit.
+
+use strict;
+use warnings;
+
+my $cmd;
+print "Looking for JOE comments...\n";
+$cmd = qq{git diff | grep '^[+]' | fgrep -B2 -A2 'JOE'};
+system($cmd);
+
+print "running prettier...\n";
+$cmd = qq{git status | grep 'modified:' | grep '[.][jt]sx*\$' | cut -d: -f2 | xargs -I{} prettier --write {}};
+system($cmd);
+
+print "running eslint...\n";
+$cmd = qq{git status | grep 'modified:' | grep '[.][jt]sx*\$' | cut -d: -f2 | xargs -I{} eslint {}};
+system($cmd);
+
+# should also search for "JOE" comments
+
