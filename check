@@ -6,8 +6,13 @@ use strict;
 use warnings;
 
 my $cmd;
-print "Looking for JOE comments...\n";
+
+print "Looking for JOE comments in tracked files...\n";
 $cmd = qq{git diff | grep '^[+]' | fgrep -B2 -A2 'JOE'};
+system($cmd);
+
+print "Looking for JOE comments in untracked files...\n";
+$cmd = qq{git ls-files -o | fgrep -v '.swp' | xargs -I{} fgrep -Hn -B2 -A2 'JOE' {}};
 system($cmd);
 
 print "running prettier...\n";
