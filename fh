@@ -24,6 +24,7 @@ if ($fgrepArgs[0] eq '-skip'){
     $fileFilter .= q{| fgrep -v '/.svn/'};
     $fileFilter .= q{| fgrep -v '/nux-react/build/'};
     $fileFilter .= q{| fgrep -v '/legacy-content/'};
+    $fileFilter .= q{| fgrep -v '/legacy_journals/'};
     $fileFilter .= q{| fgrep -v '/static/js/main'};
     $fileFilter .= q{| fgrep -v 'production.min.js'};
     # $fileFilter .= q{| fgrep -v 'thm-react.js'};
