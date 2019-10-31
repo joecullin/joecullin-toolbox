@@ -6,6 +6,7 @@
 # 2. Cmd-tab to your terminal and run vv.
 # 3. Make your changes and then :wq.
 # 4. Now your changed text is in the clipboard.
+# To abandon your changes, i.e. don't write to clipboard, exit vi with :cq.
 
 use strict;
 use warnings;
@@ -16,7 +17,7 @@ my $removeNewline = qq{| /usr/bin/perl -p -e 's/.\$//s'};
 $removeNewline = ''; # Haven't gotten this working, and it's not a big deal.
 
 system("pbpaste > $tempFile");
-system(qq{/usr/bin/vim $tempFile});
-system(qq{cat ${tempFile} ${removeNewline} | pbcopy});
+my $success = !system(qq{/usr/bin/vim $tempFile});
+system(qq{cat ${tempFile} ${removeNewline} | pbcopy}) if $success;
 unlink $tempFile;
 
