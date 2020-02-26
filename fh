@@ -17,17 +17,11 @@ my $searchString = pop @fgrepArgs;
 if ($fgrepArgs[0] eq '-skip'){
 
     $fileFilter .= q{| fgrep -v '/node_modules/'};
-    $fileFilter .= q{| fgrep -v '/static-src/'};
-    $fileFilter .= q{| fgrep -v '/.min.js/'};
-    $fileFilter .= q{| fgrep -v '/critical-css/'};
+    $fileFilter .= q{| fgrep -v '/build/'};
+    $fileFilter .= q{| fgrep -v '/build-src/'};
+    $fileFilter .= q{| fgrep -v '.min.js'};
+    $fileFilter .= q{| fgrep -v '.min.css'};
     $fileFilter .= q{| fgrep -v '/data/'};
-    $fileFilter .= q{| fgrep -v '/.svn/'};
-    $fileFilter .= q{| fgrep -v '/nux-react/build/'};
-    $fileFilter .= q{| fgrep -v '/legacy-content/'};
-    $fileFilter .= q{| fgrep -v '/legacy_journals/'};
-    $fileFilter .= q{| fgrep -v '/static/js/main'};
-    $fileFilter .= q{| fgrep -v 'production.min.js'};
-    # $fileFilter .= q{| fgrep -v 'thm-react.js'};
     print "Skipping some files: " . $fileFilter . "\n";
     shift @fgrepArgs;
 }
