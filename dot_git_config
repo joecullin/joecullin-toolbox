@@ -1,0 +1,5 @@
+[credential]
+	helper = cache --timeout=72000
+[user]
+	email = joe@joecullin.com
+	name = Joe Cullin

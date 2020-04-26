@@ -1,15 +1,18 @@
-
 export VISUAL=vi
 export EDITOR=vi
 
-export PATH=$PATH:/Users/jcullin/scripts/joecullin-toolbox:/Users/jcullin/scripts
+export PATH=$PATH:/Users/joe/scripts/joecullin-toolbox:/Users/joe/scripts
 
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home/
-export PATH=$PATH:/opt/apache-maven-3.5.4/bin
+# old:
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home/
+# export PATH=$PATH:/opt/apache-maven-3.5.4/bin
 
 export site=/code/tin.thomasnet/site
 
-git config --global credential.helper "cache --timeout=72000"
+# moved to gitconfig
+# git config --global credential.helper "cache --timeout=72000"
+
+export code=/Volumes/code
 
 # show git branch in prompt
 # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/'
@@ -17,3 +20,7 @@ parse_git_branch() {
      git status -b -s 2>/dev/null | paste -sd ' ' - | perl -p -e 's/## (.*?)[.]{3}.*?\s(.*)/" " . $1 . " " . ($2 ? "DIRTY" : "clean")/es'
 }
 export PS1="mac\$(parse_git_branch) \w \$ "
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
