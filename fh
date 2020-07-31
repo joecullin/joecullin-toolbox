@@ -21,7 +21,11 @@ if ($fgrepArgs[0] eq '-skip'){
     $fileFilter .= q{| fgrep -v '/build-src/'};
     $fileFilter .= q{| fgrep -v '.min.js'};
     $fileFilter .= q{| fgrep -v '.min.css'};
+    $fileFilter .= q{| fgrep -v 'package.lock'};
+    $fileFilter .= q{| fgrep -v 'yarn.lock'};
     $fileFilter .= q{| fgrep -v '/data/'};
+    $fileFilter .= q{| fgrep -v '/logs/'};
+    $fileFilter .= q{| fgrep -v '/coverage/'};
     print "Skipping some files: " . $fileFilter . "\n";
     shift @fgrepArgs;
 }

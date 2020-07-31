@@ -3,8 +3,9 @@
 use strict;
 
 my $name = shift;
+my $start_point = shift || 'HEAD';
 
-system("git checkout -b '$name'");
+system("git checkout -b '$name' '$start_point'");
 system("git push -u origin '$name'");
 
 
