@@ -1,0 +1,26 @@
+export VISUAL=vi
+export EDITOR=vi
+
+export PATH=$PATH:/Users/Joe.Cullin/scripts/joecullin-toolbox:/Users/Joe.Cullin/scripts
+
+export code=/Users/Joe.Cullin/code
+
+git config --global credential.helper "cache --timeout=72000"
+
+# show git branch in prompt
+# git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/'
+parse_git_branch() {
+     git status -b -s 2>/dev/null | paste -sd ' ' - | perl -p -e 's/## (.*?)[.]{3}.*?\s(.*)/" " . $1 . " " . ($2 ? "DIRTY" : "clean")/es'
+}
+export PS1="mac\$(parse_git_branch) \w \$ "
+
+# Silence the "use zsh" warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+export NVM_DIR="$HOME/.nvm"
+
+# This loads nvm:
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# This loads nvm bash_completion:
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
