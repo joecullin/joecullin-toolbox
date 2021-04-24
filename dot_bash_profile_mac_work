@@ -8,9 +8,17 @@ export code=/Users/Joe.Cullin/code
 git config --global credential.helper "cache --timeout=72000"
 
 # show git branch in prompt
-# git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/'
+#
+# First lines of output from "git status -b -s" has the branch. Examples:
+#   ## master    (if there's no remote)
+#   ## master...origin/master
+# We're doing this:
+# - joining all the output lines with spaces: "paste -sd ' ' -"
+# - parsing the branch name out of the first line
+# - checking if there's anything more beyond that (list of changed files)
+#
 parse_git_branch() {
-     git status -b -s 2>/dev/null | paste -sd ' ' - | perl -p -e 's/## (.*?)[.]{3}.*?\s(.*)/" " . $1 . " " . ($2 ? "DIRTY" : "clean")/es'
+     git status -b -s 2>/dev/null | paste -sd ' ' - | perl -p -e 's/## (.*?)(?:[.]{3}.*?)?\s(.*)/" " . $1 . " " . ($2 ? "DIRTY" : "clean")/es'
 }
 export PS1="mac\$(parse_git_branch) \w \$ "
 
