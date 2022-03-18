@@ -5,6 +5,8 @@ export PATH=$PATH:/Users/Joe.Cullin/scripts/joecullin-toolbox:/Users/Joe.Cullin/
 
 export code=/Users/Joe.Cullin/code
 
+alias python=/usr/bin/python3
+
 git config --global credential.helper "cache --timeout=72000"
 
 # show git branch in prompt
