@@ -14,6 +14,10 @@ use strict;
 my $fileFilter = '';
 my @fgrepArgs = @ARGV;
 my $searchString = pop @fgrepArgs;
+
+# node_modules is so slow. Always skip it.
+$fileFilter .= q{| fgrep -v '/node_modules/'};
+
 if ($fgrepArgs[0] eq '-skip'){
 
     $fileFilter .= q{| fgrep -v '/node_modules/'};
