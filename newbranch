@@ -7,7 +7,8 @@ my $start_point = shift || 'HEAD';
 
 system("git checkout -b '$name' '$start_point'");
 
-# no-verify skips husky pre-push hooks
-system("git push -u origin '$name' --no-verify");
+# no-verify skips husky pre-push hooks locally
+# -o ci.skip skips CI pipelines on origin
+system("git push -u origin '$name' --no-verify -o ci.skip");
 
 
