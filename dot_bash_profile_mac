@@ -1,17 +1,7 @@
 export VISUAL=vi
 export EDITOR=vi
 
-export PATH=$PATH:/Users/joe/scripts/joecullin-toolbox:/Users/joe/scripts
-
-# old:
-# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-10.0.2.jdk/Contents/Home/
-# export PATH=$PATH:/opt/apache-maven-3.5.4/bin
-# export code=/code
-
-# moved to gitconfig
-# git config --global credential.helper "cache --timeout=72000"
-
-export code=/Volumes/code
+export PATH=$PATH:$HOME/code/joecullin-toolbox
 
 # show git branch in prompt
 #
@@ -31,3 +21,11 @@ export PS1="mac\$(parse_git_branch) \w \$ "
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# python stuff
+# export WORKON_HOME=$HOME/.virtualenvs
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+# export PROJECT_HOME=$HOME/Devel
+# source /usr/local/bin/virtualenvwrapper.sh
