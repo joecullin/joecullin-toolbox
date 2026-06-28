@@ -6,18 +6,25 @@
 # 2. Cmd-tab to your terminal and run vv.
 # 3. Make your changes and then :wq.
 # 4. Now your changed text is in the clipboard.
-# To abandon your changes, i.e. don't write to clipboard, exit vi with :cq.
+#
+# - To abandon your changes, i.e. don't write to clipboard, exit vi with :cq.
+# - Start with blank slate: add param "n", like `vv n`, to skip the initial clipboard copy.
 
 use strict;
 use warnings;
 
+my $firstParam = $ARGV[0];
+my $copyFromClipboard = $firstParam ne "n";
+
 my $tempFile = qq{/tmp/vv_clipboard_editor_${$}.txt};
 
-my $removeNewline = qq{| /usr/bin/perl -p -e 's/.\$//s'};
-$removeNewline = ''; # Haven't gotten this working, and it's not a big deal.
-
-system("pbpaste > $tempFile");
+if ($copyFromClipboard){
+    system("pbpaste > $tempFile");
+}
+else {
+    system("touch $tempFile");
+}
 my $success = !system(qq{/usr/bin/vim $tempFile});
-system(qq{cat ${tempFile} ${removeNewline} | pbcopy}) if $success;
+system(qq{cat ${tempFile} | pbcopy}) if $success;
 unlink $tempFile;
 
