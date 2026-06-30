@@ -13,7 +13,7 @@
 use strict;
 use warnings;
 
-my $firstParam = $ARGV[0];
+my $firstParam = $ARGV[0] || "";
 my $copyFromClipboard = $firstParam ne "n";
 
 my $tempFile = qq{/tmp/vv_clipboard_editor_${$}.txt};
