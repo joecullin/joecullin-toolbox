@@ -9,6 +9,10 @@ system("git checkout -b '$name' '$start_point'");
 
 # no-verify skips husky pre-push hooks locally
 # -o ci.skip skips CI pipelines on origin
-system("git push -u origin '$name' --no-verify -o ci.skip");
 
+# ADO doesn't support these options, and I wouldn't want them anyway, given our husky setup.
+# system("git push -u origin '$name' --no-verify -o ci.skip");
+
+
+system("git push -u origin '$name'");
 

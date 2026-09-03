@@ -31,7 +31,14 @@ else{
 # I don't know if this is the OS or brew.
 # I'm not thrilled with this workaround, but I can't get symlink to work right.
 # It's in the same place on my main systems, and I don't feel like putting in portability effort now.
-my $cmd = '/usr/local/bin/python3 -mjson.tool --sort-keys';
+
+# finally giving jq a spin.
+# - it's installed by default these days?
+# - it plays better with pbcopy
+# 
+# my $cmd = '/usr/bin/python3 -mjson.tool --sort-keys';
+
+my $cmd = '/usr/bin/jq .';
 
 # Do a test run to see if it succeeds.
 
