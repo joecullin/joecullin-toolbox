@@ -9,5 +9,7 @@
 
 COMMIT_ID="$1"
 #echo "COMMIT_ID: '$COMMIT_ID'"
+
 git diff -w $COMMIT_ID --name-status | perl -p -e 's/^/- /' | pbcopy
-git diff -w $COMMIT_ID
+
+LESS="-R --pattern=^diff.*" git diff -w $COMMIT_ID
